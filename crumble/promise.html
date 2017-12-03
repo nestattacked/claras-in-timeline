@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>promise</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="renderer" content="webkit">
+<meta name="X-UA-Compatible" content="IE=edge,chrome=1">
+</head>
+<body>
+<script>
+function Promise(func) {
+  this.errorCallback = [];
+  this.successCallback = [];
+  func(this.resolve.bind(this), this.reject.bind(this));
+}
+Promise.prototype.then = function(func) {
+  this.successCallback.push(func);
+}
+Promise.prototype.catch = function(func) {
+  this.errorCallback.push(func);
+}
+Promise.prototype.resolve = function(data) {
+  this.successCallback.forEach(function(callback){
+    callback(data);
+  });
+}
+Promise.prototype.reject = function(data) {
+  this.errorCallback.forEach(function(callback){
+    callback(data);
+  });
+}
+
+var myFirstPromise = new Promise(function(resolve, reject){
+  setTimeout(function(){
+    resolve("成功!");
+  }, 2000);
+});
+
+myFirstPromise.then(function(successMessage){
+  console.log("Yay! " + successMessage);
+});
+</script>
+</body>
+</html>
